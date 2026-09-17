@@ -1,6 +1,6 @@
 # Programa Subzoom · Congregación Garbinet
 
-Sitio privado en español para consultar y crear el programa mensual de los hermanos encargados de saludar a quienes están conectados por Zoom al finalizar las reuniones de los martes y domingos.
+Sitio privado en español para consultar y crear el programa mensual de los hermanos encargados de saludar a quienes están conectados por Zoom al finalizar las reuniones de los jueves y domingos.
 
 ## Qué incluye
 

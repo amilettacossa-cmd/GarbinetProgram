@@ -1,74 +1,43 @@
-# Instrucciones de publicación
+# Garbinet — publicación y actualización
 
-## 1. Crear el proyecto Supabase
+El programa utiliza jueves y domingos.
 
-1. Entra en [supabase.com](https://supabase.com), crea una cuenta y un proyecto gratuito.
-2. Abre **SQL Editor**, pega todo el contenido de `supabase/schema.sql` y pulsa **Run**.
-3. Instala Supabase CLI en el ordenador y accede:
+## Actualización en GitHub
 
-   ```bash
-   npm install -g supabase
-   supabase login
-   ```
+Descomprime el ZIP y carga en la raíz del repositorio index.html, app.js,
+styles.css, config.js y favicon.svg. Confirma con Commit changes.
+La carpeta assets ya no es necesaria. La carpeta supabase contiene los archivos
+para configurar el servidor; no es necesaria para mostrar la página.
 
-4. Desde la carpeta principal del proyecto, vincúlalo sustituyendo el identificador:
+Si ya conectaste config.js a tu proyecto, conserva esa URL antes de sustituirlo.
+El ZIP contiene una URL de ejemplo porque todavía no se ha facilitado la real.
 
-   ```bash
-   supabase link --project-ref IDENTIFICADOR_DEL_PROYECTO
-   ```
+## Supabase desde el navegador
 
-5. Configura los hashes de las dos contraseñas. Estos comandos las solicitan de forma oculta y evitan guardarlas en el repositorio o en el historial de la terminal:
+1. Crea un proyecto y activa Data API.
+2. En SQL Editor ejecuta supabase/schema.sql si es una instalación nueva.
+3. En Edge Functions crea garbinet-api mediante Via Editor y pega el contenido
+   de supabase/functions/garbinet-api/index.ts. Publica la función.
+4. Desactiva Verify JWT para esta función: utiliza su propia verificación de sesión.
+5. En Edge Functions → Secrets configura VIEWER_PASSWORD_HASH y
+   ADMIN_PASSWORD_HASH con los hashes SHA-256 hexadecimales de las contraseñas
+   acordadas, y SESSION_SECRET con un valor aleatorio seguro de al menos 32 caracteres.
+   No publiques contraseñas, hashes o claves de servidor en GitHub.
+6. En config.js cambia TU-PROYECTO por el identificador de tu proyecto.
+7. Activa GitHub Pages: Settings → Pages → Deploy from a branch → main → / (root).
 
-   ```bash
-   read -s -p "Contraseña general: " viewer_password; echo
-   viewer_hash=$(printf %s "$viewer_password" | shasum -a 256 | cut -d' ' -f1)
-   supabase secrets set VIEWER_PASSWORD_HASH="$viewer_hash"
+Si la tabla ya existe con el calendario anterior, ejecuta una vez:
 
-   read -s -p "Contraseña de programación: " admin_password; echo
-   admin_hash=$(printf %s "$admin_password" | shasum -a 256 | cut -d' ' -f1)
-   supabase secrets set ADMIN_PASSWORD_HASH="$admin_hash"
-
-   session_secret=$(openssl rand -hex 32)
-   supabase secrets set SESSION_SECRET="$session_secret"
-   unset viewer_password viewer_hash admin_password admin_hash session_secret
-   ```
-
-6. Publica la función sin verificación JWT propia de Supabase, ya que utiliza su sesión privada firmada:
-
-   ```bash
-   supabase functions deploy garbinet-api --no-verify-jwt
-   ```
-
-## 2. Conectar el sitio
-
-1. En Supabase abre **Project Settings → Data API** y copia la URL del proyecto.
-2. Abre `config.js` y sustituye `https://TU-PROYECTO.supabase.co` por la URL copiada. Conserva `/functions/v1/garbinet-api` al final.
-
-Ejemplo:
-
-```js
-window.GARBINET_CONFIG = {
-  apiUrl: "https://abcdefgh.supabase.co/functions/v1/garbinet-api"
-};
+```sql
+alter table public.assignments drop constraint if exists meeting_day_only;
+alter table public.assignments add constraint meeting_day_only
+check (extract(dow from service_date) in (0, 4));
 ```
 
-## 3. Publicar en GitHub Pages
+Si ya has corregido SQL y publicado la función para jueves y domingos,
+no hace falta repetir esos pasos.
 
-1. Crea un repositorio nuevo en GitHub, por ejemplo `garbinet-programa`.
-2. Sube el contenido de esta carpeta a la raíz del repositorio.
-3. En el repositorio abre **Settings → Pages**.
-4. En **Build and deployment**, selecciona **Deploy from a branch**.
-5. Selecciona la rama `main`, carpeta `/ (root)`, y pulsa **Save**.
-6. GitHub mostrará la dirección pública después de unos minutos.
+## Estado del proyecto
 
-## Seguridad
-
-- GitHub no contiene las contraseñas en texto legible ni sus hashes.
-- La tabla no concede acceso público directo.
-- Las sesiones caducan después de 12 horas y se guardan solo durante la sesión del navegador.
-- Para cambiar una contraseña, calcula su SHA-256 y cambia el secreto correspondiente en Supabase.
-- El enlace puede ser público, pero sin contraseña no se puede consultar el programa.
-
-## Nota de identidad
-
-La interfaz usa un lenguaje gráfico sobrio inspirado en jw.org, sin copiar el logotipo ni presentarse como sitio oficial. El pie lo declara expresamente.
+Las sesiones duran 12 horas. El calendario requiere conexión al servidor.
+Este paquete no incorpora todavía una PWA ni un modo sin conexión.

@@ -30,7 +30,7 @@ function meetingDays(date) {
   const days = [];
   const cursor = new Date(date.getFullYear(), date.getMonth(), 1);
   while (cursor.getMonth() === date.getMonth()) {
-    if (cursor.getDay() === 0 || cursor.getDay() === 2) days.push(new Date(cursor));
+    if (cursor.getDay() === 0 || cursor.getDay() === 4) days.push(new Date(cursor));
     cursor.setDate(cursor.getDate() + 1);
   }
   return days;
