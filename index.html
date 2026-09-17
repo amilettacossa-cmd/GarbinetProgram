@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#4a6da7">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Congregación Garbinet · Programa Subzoom</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <main class="login-card" aria-labelledby="login-title">
+      <div class="brand-mark" aria-hidden="true">G</div>
+      <p class="eyebrow">CONGREGACIÓN GARBINET</p>
+      <h1 id="login-title">Programa Subzoom</h1>
+      <p class="login-copy">Introduce la contraseña para consultar el programa.</p>
+      <form id="login-form" novalidate>
+        <label for="viewer-password">Contraseña</label>
+        <div class="password-row">
+          <input id="viewer-password" name="password" type="password" autocomplete="current-password" required autofocus>
+          <button class="icon-button" type="button" data-toggle-password="viewer-password" aria-label="Mostrar contraseña">Ver</button>
+        </div>
+        <p id="login-error" class="form-error" role="alert" aria-live="polite"></p>
+        <button class="primary-button full" type="submit">Entrar</button>
+      </form>
+    </main>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="site-brand" href="#" aria-label="Programa Subzoom, inicio">
+          <span class="small-mark" aria-hidden="true">G</span>
+          <span><strong>Garbinet</strong><small>Programa Subzoom</small></span>
+        </a>
+        <button id="open-admin" class="outline-button" type="button">Crear el programa</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro-panel">
+        <p class="eyebrow">CONGREGACIÓN GARBINET · ALICANTE</p>
+        <h1>Bienvenidos al programa Subzoom</h1>
+        <p>Consulta qué hermano saludará a los conectados por Zoom al finalizar la reunión.</p>
+      </section>
+
+      <section class="schedule-card" aria-labelledby="month-title">
+        <div class="month-nav">
+          <button id="prev-month" class="nav-button" type="button" aria-label="Mes anterior">‹</button>
+          <div>
+            <p class="section-kicker">PROGRAMA MENSUAL</p>
+            <h2 id="month-title"></h2>
+          </div>
+          <button id="next-month" class="nav-button" type="button" aria-label="Mes siguiente">›</button>
+        </div>
+        <div id="loading" class="status-message">Cargando el programa…</div>
+        <div id="schedule-list" class="schedule-list" aria-live="polite"></div>
+        <div id="empty-state" class="empty-state" hidden>
+          <span aria-hidden="true">○</span>
+          <h3>Programa todavía no disponible</h3>
+          <p>Este mes aún no ha sido programado.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Congregación Garbinet · Alicante</p>
+      <p class="disclaimer">Sitio privado de organización local. No es un sitio oficial de jw.org.</p>
+    </footer>
+  </div>
+
+  <dialog id="admin-login-dialog" class="modal">
+    <form id="admin-login-form" method="dialog" class="modal-card">
+      <button class="close-button" type="button" data-close="admin-login-dialog" aria-label="Cerrar">×</button>
+      <p class="eyebrow">ÁREA DE PROGRAMACIÓN</p>
+      <h2>Acceso autorizado</h2>
+      <p>Introduce la contraseña para crear o modificar el programa.</p>
+      <label for="admin-password">Contraseña</label>
+      <div class="password-row">
+        <input id="admin-password" name="password" type="password" autocomplete="current-password" required>
+        <button class="icon-button" type="button" data-toggle-password="admin-password" aria-label="Mostrar contraseña">Ver</button>
+      </div>
+      <p id="admin-login-error" class="form-error" role="alert" aria-live="polite"></p>
+      <button class="primary-button full" type="submit">Continuar</button>
+    </form>
+  </dialog>
+
+  <dialog id="editor-dialog" class="modal editor-modal">
+    <section class="modal-card editor-card">
+      <button class="close-button" type="button" data-close="editor-dialog" aria-label="Cerrar">×</button>
+      <p class="eyebrow">CREAR EL PROGRAMA</p>
+      <div class="editor-heading">
+        <button id="editor-prev" class="nav-button small" type="button" aria-label="Mes anterior">‹</button>
+        <h2 id="editor-month-title"></h2>
+        <button id="editor-next" class="nav-button small" type="button" aria-label="Mes siguiente">›</button>
+      </div>
+      <p class="editor-help">Selecciona un hermano para cada martes y domingo del mes.</p>
+      <form id="editor-form">
+        <div id="editor-list" class="editor-list"></div>
+        <div class="editor-actions">
+          <p id="save-status" class="save-status" role="status" aria-live="polite"></p>
+          <button id="save-program" class="primary-button" type="submit">Guardar programa</button>
+        </div>
+      </form>
+    </section>
+  </dialog>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
