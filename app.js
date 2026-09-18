@@ -98,7 +98,7 @@ function renderSchedule(assignments) {
     row.className = "schedule-item";
     const safeName = document.createElement("span");
     safeName.className = "brother-name";
-    safeName.textContent = item.brother_name;
+    safeName.textContent = item.brother_name || "Pendiente de asignar";
     row.innerHTML = `<div class="date-block"><span class="date-number">${day}</span><span class="date-day">${capitalise(dayFormatter.format(date))}</span></div>`;
     row.appendChild(safeName);
     list.appendChild(row);
@@ -156,7 +156,7 @@ function renderEditor() {
     const select = document.createElement("select");
     select.name = key;
     select.setAttribute("aria-label", `Hermano para ${capitalise(dayFormatter.format(date))} ${date.getDate()}`);
-    select.append(new Option("Seleccionar un hermano", ""));
+    select.append(new Option("Sin asignar", ""));
     for (const brother of BROTHERS) select.append(new Option(brother, brother));
     select.value = state.assignments.get(key) || "";
     row.append(dateBlock, select);
@@ -171,11 +171,6 @@ async function saveProgram(event) {
     service_date: select.name,
     brother_name: select.value
   }));
-  if (assignments.some(item => !item.brother_name)) {
-    $("#save-status").textContent = "Completa todos los campos antes de guardar.";
-    $("#save-status").style.color = "var(--danger)";
-    return;
-  }
   button.disabled = true;
   $("#save-status").textContent = "Guardando…";
   $("#save-status").style.color = "var(--muted)";
